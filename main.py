@@ -3,18 +3,14 @@ import sys
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Student management system')
-
-        # exitAct = QAction(QIcon('exit.png'), ' &Quit', self)
-        #
-        # exitAct.setShortcut('Ctrl+Q')
-        # exitAct.setStatusTip('Exit application')
-        # exitAct.triggered.connect(qApp.quit)
+        self.setMinimumSize(600,500)
 
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
@@ -22,7 +18,7 @@ class MainWindow(QMainWindow):
         help_menu_item = menubar.addMenu('&Help')
         edit_menu_item = menubar.addMenu('&Edit')
 
-        add_student_action = QAction('Add student', self)
+        add_student_action = QAction(QIcon('icons/add.png'), 'Add student', self)
         # self.accepted.emit()
         add_student_action.triggered.connect(self.insert)
         file_menu_item.addAction(add_student_action)
@@ -31,7 +27,7 @@ class MainWindow(QMainWindow):
         help_menu_item.addAction(about_action)
         # about_action.setMenuRole(QAction.MenuRole.NoRole) fom mac
 
-        search_action = QAction('Search', self)
+        search_action = QAction(QIcon('icons/search.png'), 'Search', self)
         edit_menu_item.addAction(search_action)
         search_action.triggered.connect(self.search)
 
@@ -44,6 +40,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.table)
         self.show()
         self.load_data()
+
+        # Create a toolbar
+        toolbar = QToolBar()
+        toolbar.setMovable(True)
+        self.addToolBar(toolbar)
+        toolbar.addAction(add_student_action)
+        toolbar.addAction(search_action)
 
     def load_data(self):
         connection = sqlite3.connect('database.db')
